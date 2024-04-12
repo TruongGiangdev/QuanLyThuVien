@@ -1,0 +1,9 @@
+D:\C#\btlQuanLyThuVien\DAL\bin\Debug\DAL.dll
+D:\C#\btlQuanLyThuVien\DAL\bin\Debug\DAL.pdb
+D:\C#\btlQuanLyThuVien\DAL\bin\Debug\DTO.dll
+D:\C#\btlQuanLyThuVien\DAL\bin\Debug\DTO.pdb
+D:\C#\btlQuanLyThuVien\DAL\obj\Debug\DAL.csproj.AssemblyReference.cache
+D:\C#\btlQuanLyThuVien\DAL\obj\Debug\DAL.csproj.CoreCompileInputs.cache
+D:\C#\btlQuanLyThuVien\DAL\obj\Debug\DAL.csproj.CopyComplete
+D:\C#\btlQuanLyThuVien\DAL\obj\Debug\DAL.dll
+D:\C#\btlQuanLyThuVien\DAL\obj\Debug\DAL.pdb

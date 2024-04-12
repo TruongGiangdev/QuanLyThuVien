@@ -1,0 +1,1140 @@
+﻿USE [master]
+GO
+/****** Object:  Database [QLTV]    Script Date: 4/6/2024 4:37:14 PM ******/
+CREATE DATABASE [QLTV]
+ 
+ALTER DATABASE [QLTV] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [QLTV].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [QLTV] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [QLTV] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [QLTV] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [QLTV] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [QLTV] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [QLTV] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [QLTV] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [QLTV] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [QLTV] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [QLTV] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [QLTV] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [QLTV] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [QLTV] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [QLTV] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [QLTV] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [QLTV] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [QLTV] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [QLTV] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [QLTV] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [QLTV] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [QLTV] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [QLTV] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [QLTV] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [QLTV] SET  MULTI_USER 
+GO
+ALTER DATABASE [QLTV] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [QLTV] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [QLTV] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [QLTV] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [QLTV] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [QLTV] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [QLTV] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [QLTV] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [QLTV]
+GO
+/****** Object:  Table [dbo].[NhanVien]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[NhanVien](
+	[sMaNV] [nvarchar](20) NOT NULL,
+	[sTenNV] [nvarchar](50) NULL,
+	[bGioiTinh] [bit] NULL,
+	[sDiaChi] [nvarchar](50) NULL,
+	[sDT] [nvarchar](12) NULL,
+	[dNgaySinh] [date] NULL,
+	[sMaChucVu] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaNV] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[View_NhanVien]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   VIEW [dbo].[View_NhanVien] AS
+SELECT 
+    sMaNV as [Mã nhân viên], 
+    sTenNV as [Tên nhân viên], 
+    CASE 
+        WHEN bGioiTinh = 1 THEN N'Nam'
+        ELSE N'Nữ' 
+    END AS [Giới tính],
+    sDiaChi as [Địa chỉ], 
+    sDT as [SDT], 
+    dNgaySinh as [Ngày sinh], 
+    sMaChucVu AS [Tên chức vụ]
+FROM 
+    NhanVien
+GO
+/****** Object:  Table [dbo].[DocGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DocGia](
+	[sMaDocGia] [nvarchar](100) NOT NULL,
+	[sTenDocGia] [nvarchar](100) NULL,
+	[dNgaySinh] [date] NULL,
+	[bGioiTinh] [bit] NULL,
+	[sDiaChi] [nvarchar](50) NULL,
+	[sDT] [nvarchar](12) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaDocGia] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[View_DocGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   VIEW [dbo].[View_DocGia] AS
+SELECT 
+    sMaDocGia as [Mã độc giả], 
+    sTenDocGia as [Tên độc giả], 
+	dNgaySinh as [Ngày sinh],
+    CASE 
+        WHEN bGioiTinh = 1 THEN N'Nam'
+        ELSE N'Nữ' 
+    END AS [Giới tính],
+    sDiaChi as [Địa chỉ], 
+    sDT as [SDT]
+FROM 
+    DocGia
+GO
+/****** Object:  Table [dbo].[TacGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TacGia](
+	[sMaTacGia] [nvarchar](100) NOT NULL,
+	[sTenTacGia] [nvarchar](100) NULL,
+	[bGioiTinh] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaTacGia] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[View_TacGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   VIEW [dbo].[View_TacGia] AS
+SELECT 
+    sMaTacGia as [Mã tác giả], 
+    sTenTacGia as [Tên tác giả], 
+	
+    CASE 
+        WHEN bGioiTinh = 1 THEN N'Nam'
+        ELSE N'Nữ' 
+    END AS [Giới tính]
+     
+    
+FROM 
+    TacGia
+GO
+/****** Object:  Table [dbo].[Sach]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Sach](
+	[sMaSach] [nvarchar](100) NOT NULL,
+	[sTenSach] [nvarchar](100) NULL,
+	[dNamXB] [date] NULL,
+	[iSoLuong] [int] NULL,
+	[fGia] [float] NULL,
+	[sMaLoai] [nvarchar](50) NULL,
+	[sMaNXB] [nvarchar](50) NULL,
+	[sMaTacGia] [nvarchar](max) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaSach] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[View_ThongTinSach]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   VIEW [dbo].[View_ThongTinSach]
+AS
+SELECT 
+    sMaSach AS [Mã sách],
+    sTenSach AS [Tên sách],
+    dNamXB as [Năm xuất bản],
+    iSoLuong AS [Số lượng],
+    fGia AS [Giá],
+    sMaLoai AS [Loại sách],
+    sMaNXB AS [Nhà xuất bản],
+	sMaTacGia as [Mã tác giả]
+FROM 
+    Sach
+GO
+/****** Object:  Table [dbo].[PhieuMuon]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PhieuMuon](
+	[sMaPhieuMuon] [nvarchar](20) NOT NULL,
+	[sMaDocGia] [nvarchar](100) NULL,
+	[sMaNV] [nvarchar](20) NULL,
+	[sMaSach] [nvarchar](max) NULL,
+	[dNgayMuon] [date] NULL,
+	[dNgayHenTra] [date] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaPhieuMuon] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[View_PhieuMuon]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   VIEW [dbo].[View_PhieuMuon] AS
+SELECT sMaPhieuMuon as [Mã phiếu mượn],
+	   sMaDocGia as [Mã độc giả],
+	   sMaNV as [Mã nhân viên],
+	   sMaSach as [Mã sách],
+	   dNgayMuon as [Ngày mượn],
+	   dNgayHenTra as [Ngày trả]
+FROM PhieuMuon
+GO
+/****** Object:  Table [dbo].[PhieuTra]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PhieuTra](
+	[sMaPhieuTra] [nvarchar](20) NOT NULL,
+	[sMaPhieuMuon] [nvarchar](20) NULL,
+	[sMaNV] [nvarchar](20) NULL,
+	[sMaDocGia] [nvarchar](100) NULL,
+	[sMaSach] [nvarchar](max) NULL,
+	[dNgayTra] [date] NULL,
+	[sMaTinhTrang] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaPhieuTra] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[View_PhieuTra]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   VIEW [dbo].[View_PhieuTra] AS
+SELECT sMaPhieuTra as [Mã phiếu trả],
+	   sMaPhieuMuon as [Mã phiếu mượn],
+	   sMaNV as [Mã nhân viên],
+	   sMaDocGia as [Mã độc giả],
+	   sMaSach as [Mã sách],
+	   dNgayTra as [Ngày trả],
+	   sMaTinhTrang as [Tình trạng]
+FROM PhieuTra
+GO
+/****** Object:  Table [dbo].[PhieuPhat]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PhieuPhat](
+	[sMaPhieuPhat] [nvarchar](20) NOT NULL,
+	[sMaPhieuTra] [nvarchar](20) NULL,
+	[fTienPhat] [float] NULL,
+	[sNoiDung] [nvarchar](100) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaPhieuPhat] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[View_PhieuPhat]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   VIEW [dbo].[View_PhieuPhat] AS
+SELECT sMaPhieuPhat as [Mã phiếu phạt],
+	   sMaPhieuTra as [Mã phiếu trả],
+	   fTienPhat as [Tiền phạt],
+	   sNoiDung as [Nội dung]
+FROM PhieuPhat
+GO
+/****** Object:  Table [dbo].[ChucVu]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ChucVu](
+	[sMaChucVu] [nvarchar](50) NOT NULL,
+	[sTenChucVu] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaChucVu] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[NhaXuatBan]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[NhaXuatBan](
+	[sMaNXB] [nvarchar](50) NOT NULL,
+	[sTenNXB] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaNXB] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[QuyenHan]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[QuyenHan](
+	[bMaQuyen] [bit] NOT NULL,
+	[sTenQuyen] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[bMaQuyen] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TaiKhoan]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TaiKhoan](
+	[sLoginUser] [nvarchar](50) NOT NULL,
+	[sMatKhau] [nvarchar](100) NULL,
+	[bQuyenHan] [bit] NULL,
+	[sMaNV] [nvarchar](20) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sLoginUser] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TheLoaiSach]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TheLoaiSach](
+	[sMaTheLoai] [nvarchar](50) NOT NULL,
+	[sTenTheLoai] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaTheLoai] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TinhTrangSach]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TinhTrangSach](
+	[sMaTinhTrang] [nvarchar](50) NOT NULL,
+	[sTenTinhTrang] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[sMaTinhTrang] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[NhanVien]  WITH CHECK ADD  CONSTRAINT [FK_MaChucVu] FOREIGN KEY([sMaChucVu])
+REFERENCES [dbo].[ChucVu] ([sMaChucVu])
+GO
+ALTER TABLE [dbo].[NhanVien] CHECK CONSTRAINT [FK_MaChucVu]
+GO
+ALTER TABLE [dbo].[PhieuMuon]  WITH CHECK ADD  CONSTRAINT [FK_MaDocGia] FOREIGN KEY([sMaDocGia])
+REFERENCES [dbo].[DocGia] ([sMaDocGia])
+GO
+ALTER TABLE [dbo].[PhieuMuon] CHECK CONSTRAINT [FK_MaDocGia]
+GO
+ALTER TABLE [dbo].[PhieuMuon]  WITH CHECK ADD  CONSTRAINT [FK_MaNV] FOREIGN KEY([sMaNV])
+REFERENCES [dbo].[NhanVien] ([sMaNV])
+GO
+ALTER TABLE [dbo].[PhieuMuon] CHECK CONSTRAINT [FK_MaNV]
+GO
+ALTER TABLE [dbo].[PhieuPhat]  WITH CHECK ADD  CONSTRAINT [FK_MaPhieuPhat] FOREIGN KEY([sMaPhieuTra])
+REFERENCES [dbo].[PhieuTra] ([sMaPhieuTra])
+GO
+ALTER TABLE [dbo].[PhieuPhat] CHECK CONSTRAINT [FK_MaPhieuPhat]
+GO
+ALTER TABLE [dbo].[PhieuTra]  WITH CHECK ADD  CONSTRAINT [FK_MaDocGia_PhieuTra] FOREIGN KEY([sMaDocGia])
+REFERENCES [dbo].[DocGia] ([sMaDocGia])
+GO
+ALTER TABLE [dbo].[PhieuTra] CHECK CONSTRAINT [FK_MaDocGia_PhieuTra]
+GO
+ALTER TABLE [dbo].[PhieuTra]  WITH CHECK ADD  CONSTRAINT [FK_MaNV_PhieuTra] FOREIGN KEY([sMaNV])
+REFERENCES [dbo].[NhanVien] ([sMaNV])
+GO
+ALTER TABLE [dbo].[PhieuTra] CHECK CONSTRAINT [FK_MaNV_PhieuTra]
+GO
+ALTER TABLE [dbo].[PhieuTra]  WITH CHECK ADD  CONSTRAINT [FK_MaPhieuMuon] FOREIGN KEY([sMaPhieuMuon])
+REFERENCES [dbo].[PhieuMuon] ([sMaPhieuMuon])
+GO
+ALTER TABLE [dbo].[PhieuTra] CHECK CONSTRAINT [FK_MaPhieuMuon]
+GO
+ALTER TABLE [dbo].[PhieuTra]  WITH CHECK ADD  CONSTRAINT [FK_TinhTrangSach_PhieuTra] FOREIGN KEY([sMaTinhTrang])
+REFERENCES [dbo].[TinhTrangSach] ([sMaTinhTrang])
+GO
+ALTER TABLE [dbo].[PhieuTra] CHECK CONSTRAINT [FK_TinhTrangSach_PhieuTra]
+GO
+ALTER TABLE [dbo].[Sach]  WITH CHECK ADD  CONSTRAINT [FK_MaLoaiSach] FOREIGN KEY([sMaLoai])
+REFERENCES [dbo].[TheLoaiSach] ([sMaTheLoai])
+GO
+ALTER TABLE [dbo].[Sach] CHECK CONSTRAINT [FK_MaLoaiSach]
+GO
+ALTER TABLE [dbo].[Sach]  WITH CHECK ADD  CONSTRAINT [FK_MaNXB] FOREIGN KEY([sMaNXB])
+REFERENCES [dbo].[NhaXuatBan] ([sMaNXB])
+GO
+ALTER TABLE [dbo].[Sach] CHECK CONSTRAINT [FK_MaNXB]
+GO
+ALTER TABLE [dbo].[TaiKhoan]  WITH CHECK ADD  CONSTRAINT [FK_MaNV_TK] FOREIGN KEY([sMaNV])
+REFERENCES [dbo].[NhanVien] ([sMaNV])
+GO
+ALTER TABLE [dbo].[TaiKhoan] CHECK CONSTRAINT [FK_MaNV_TK]
+GO
+ALTER TABLE [dbo].[TaiKhoan]  WITH CHECK ADD  CONSTRAINT [FK_QuyenHan] FOREIGN KEY([bQuyenHan])
+REFERENCES [dbo].[QuyenHan] ([bMaQuyen])
+GO
+ALTER TABLE [dbo].[TaiKhoan] CHECK CONSTRAINT [FK_QuyenHan]
+GO
+/****** Object:  StoredProcedure [dbo].[proc_Login]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+create   proc [dbo].[proc_Login]
+@loginUser nvarchar(50),
+@matKhau nvarchar(100)
+as
+begin
+	select * from TaiKhoan 
+	where sLoginUser = @loginUser and
+		  sMatKhau = @matKhau
+end
+GO
+/****** Object:  StoredProcedure [dbo].[SuaDocGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[SuaDocGia]
+(
+    @MaDocGia NVARCHAR(100),
+    @TenDocGia NVARCHAR(100),
+    @NgaySinh DATE,
+    @GioiTinh BIT,
+    @DiaChi NVARCHAR(50),
+    @SDT NVARCHAR(12)
+)
+AS
+BEGIN
+
+    UPDATE DocGia
+    SET 
+        sTenDocGia = @TenDocGia,
+        dNgaySinh = @NgaySinh,
+        bGioiTinh = @GioiTinh,
+        sDiaChi = @DiaChi,
+        sDT = @SDT
+    WHERE
+        sMaDocGia = @MaDocGia
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SuaTacGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[SuaTacGia]
+(
+    @MaTacGia NVARCHAR(100),
+    @TenTacGia NVARCHAR(100),
+    @GioiTinh BIT
+)
+AS
+BEGIN
+
+    UPDATE TacGia
+    SET sTenTacGia = @TenTacGia,
+        bGioiTinh = @GioiTinh
+    WHERE sMaTacGia = @MaTacGia;
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SuaThongTinNhanVien]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[SuaThongTinNhanVien]
+(
+    @MaNV NVARCHAR(20),
+    @TenNV NVARCHAR(50),
+    @GioiTinh BIT,
+    @DiaChi NVARCHAR(50),
+    @DT NVARCHAR(12),
+    @NgaySinh DATE,
+    @MaChucVu NVARCHAR(50)
+)
+AS
+BEGIN
+    UPDATE NhanVien
+    SET sTenNV = @TenNV,
+        bGioiTinh = @GioiTinh,
+        sDiaChi = @DiaChi,
+        sDT = @DT,
+        dNgaySinh = @NgaySinh,
+        sMaChucVu = @MaChucVu
+    WHERE sMaNV = @MaNV
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SuaThongTinPhieuMuon]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[SuaThongTinPhieuMuon]
+    @MaPhieuMuon NVARCHAR(20),
+    @MaDocGia NVARCHAR(100),
+    @MaNV NVARCHAR(20),
+    @MaSach NVARCHAR(MAX),
+    @NgayMuon DATE,
+    @NgayHenTra DATE
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM PhieuMuon WHERE sMaPhieuMuon = @MaPhieuMuon)
+    BEGIN
+
+        UPDATE PhieuMuon
+        SET sMaPhieuMuon = @MaPhieuMuon,
+            sMaDocGia = @MaDocGia,
+            sMaNV = @MaNV,
+            sMaSach = @MaSach,
+            dNgayMuon = @NgayMuon,
+			dNgayHenTra = @NgayHenTra
+        WHERE sMaPhieuMuon = @MaPhieuMuon         
+	END
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SuaThongTinPhieuPhat]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[SuaThongTinPhieuPhat]
+    @MaPhieuPhat nvarchar(20),
+	@MaPhieuTra nvarchar(20),
+	@TienPhat float,
+	@NoiDung nvarchar(100)
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM PhieuPhat WHERE sMaPhieuPhat = @MaPhieuPhat)
+    BEGIN
+
+        UPDATE PhieuPhat
+        SET sMaPhieuPhat = @MaPhieuPhat,
+            sMaPhieuTra = @MaPhieuTra,
+			fTienPhat = @TienPhat,
+			sNoiDung = @NoiDung
+        WHERE sMaPhieuPhat = @MaPhieuPhat;         
+	END
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SuaThongTinPhieuTra]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[SuaThongTinPhieuTra]
+    @MaPhieuTra NVARCHAR(20),
+	@MaPhieuMuon nvarchar(20),
+	@MaNV nvarchar(20),
+    @MaDocGia NVARCHAR(100),
+    @MaSach NVARCHAR(MAX),
+    @NgayTra DATE,
+	@MaTinhTrang nvarchar(50)
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM PhieuTra WHERE sMaPhieuTra = @MaPhieuTra)
+    BEGIN
+
+        UPDATE PhieuTra
+        SET sMaPhieuMuon = @MaPhieuMuon,
+            sMaNV = @MaNV,
+            sMaDocGia = @MaDocGia,
+			sMaSach = @MaSach,
+			dNgayTra = @NgayTra,
+            sMaTinhTrang = @MaTinhTrang
+        WHERE sMaPhieuTra = @MaPhieuTra;         
+	END
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SuaThongTinSach]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[SuaThongTinSach]
+    @MaSach NVARCHAR(100),
+    @TenSach NVARCHAR(100),
+    @NamXB DATE,
+    @SoLuong INT,
+    @Gia FLOAT,
+    @MaLoai NVARCHAR(50),
+    @MaNXB NVARCHAR(50),
+    @MaTacGia NVARCHAR(max)
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM Sach WHERE sMaSach = @MaSach)
+    BEGIN
+        -- Sửa thông tin sách trong bảng Sach
+        UPDATE Sach
+        SET sTenSach = @TenSach,
+            dNamXB = @NamXB,
+            iSoLuong = @SoLuong,
+            fGia = @Gia,
+            sMaLoai = @MaLoai,
+            sMaNXB = @MaNXB,
+			sMaTacGia = @MaTacGia
+        WHERE sMaSach = @MaSach;           
+	END
+END
+GO
+/****** Object:  StoredProcedure [dbo].[ThemDocGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[ThemDocGia]
+(
+    @MaDocGia NVARCHAR(100),
+    @TenDocGia NVARCHAR(100),
+    @NgaySinh DATE,
+    @GioiTinh BIT,
+    @DiaChi NVARCHAR(50),
+    @SDT NVARCHAR(12)
+)
+AS
+BEGIN
+    INSERT INTO DocGia (sMaDocGia, sTenDocGia, dNgaySinh, bGioiTinh, sDiaChi, sDT)
+    VALUES (@MaDocGia, @TenDocGia, @NgaySinh, @GioiTinh, @DiaChi, @SDT)
+END
+GO
+/****** Object:  StoredProcedure [dbo].[ThemNhanVien]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[ThemNhanVien]
+(
+    @MaNV NVARCHAR(20),
+    @TenNV NVARCHAR(50),
+    @GioiTinh BIT,
+    @DiaChi NVARCHAR(50),
+    @DT NVARCHAR(12),
+    @NgaySinh DATE,
+    @MaChucVu NVARCHAR(50)
+)
+AS
+BEGIN
+    INSERT INTO NhanVien (sMaNV, sTenNV, bGioiTinh, sDiaChi, sDT, dNgaySinh, sMaChucVu)
+    VALUES (@MaNV, @TenNV, @GioiTinh, @DiaChi, @DT, @NgaySinh, @MaChucVu)
+END
+GO
+/****** Object:  StoredProcedure [dbo].[ThemPhieuMuon]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[ThemPhieuMuon]
+    @MaPhieuMuon NVARCHAR(20),
+    @MaDocGia NVARCHAR(100),
+    @MaNV NVARCHAR(20),
+    @MaSach NVARCHAR(MAX),
+    @NgayMuon DATE,
+    @NgayHenTra DATE
+AS
+BEGIN
+        -- Thêm phiếu mượn vào bảng PhieuMuon
+        INSERT INTO PhieuMuon (sMaPhieuMuon, sMaDocGia, sMaNV, sMaSach, dNgayMuon, dNgayHenTra)
+        VALUES (@MaPhieuMuon, @MaDocGia, @MaNV, @MaSach, @NgayMuon, @NgayHenTra);
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[ThemPhieuPhat]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[ThemPhieuPhat]
+    @MaPhieuPhat nvarchar(20),
+	@MaPhieuTra nvarchar(20),
+	@TienPhat float,
+	@NoiDung nvarchar(100)
+AS
+BEGIN
+        -- Thêm phiếu phạt
+        INSERT INTO PhieuPhat(sMaPhieuPhat, sMaPhieuTra, fTienPhat, sNoiDung)
+        VALUES (@MaPhieuPhat, @MaPhieuTra, @TienPhat, @NoiDung)
+END
+GO
+/****** Object:  StoredProcedure [dbo].[ThemPhieuTra]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[ThemPhieuTra]
+    @MaPhieuTra NVARCHAR(20),
+	@MaPhieuMuon nvarchar(20),
+	@MaNV nvarchar(20),
+    @MaDocGia NVARCHAR(100),
+    @MaSach NVARCHAR(MAX),
+    @NgayTra DATE,
+	@MaTinhTrang nvarchar(50)
+AS
+BEGIN
+        -- Thêm phiếu trả vào bảng PhieuTra
+        INSERT INTO PhieuTra(sMaPhieuTra, sMaPhieuMuon, sMaNV, sMaDocGia, sMaSach, dNgayTra, sMaTinhTrang)
+        VALUES (@MaPhieuTra, @MaPhieuMuon, @MaNV, @MaDocGia, @MaSach, @NgayTra, @MaTinhTrang);
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[ThemSach]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[ThemSach]
+    @MaSach NVARCHAR(100),
+    @TenSach NVARCHAR(100),
+    @NamXB DATE,
+    @SoLuong INT,
+    @Gia FLOAT,
+    @MaLoai NVARCHAR(50),
+    @MaNXB NVARCHAR(50),
+    @MaTacGia NVARCHAR(max)
+AS
+BEGIN
+    --Thêm sách vào bảng Sach
+    INSERT INTO Sach (sMaSach, sTenSach, dNamXB, iSoLuong, fGia, sMaLoai, sMaNXB, sMaTacGia)
+    VALUES (@MaSach, @TenSach, @NamXB, @SoLuong, @Gia, @MaLoai, @MaNXB, @MaTacGia);
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[ThemTacGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[ThemTacGia]
+(
+    @MaTacGia NVARCHAR(100),
+    @TenTacGia NVARCHAR(100),
+    @GioiTinh BIT
+)
+AS
+BEGIN
+
+    INSERT INTO TacGia (sMaTacGia, sTenTacGia, bGioiTinh)
+    VALUES (@MaTacGia, @TenTacGia, @GioiTinh);
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TimKiemDocGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[TimKiemDocGia]
+(
+    @TuKhoa NVARCHAR(100)
+)
+AS
+BEGIN
+
+    SELECT 
+        sMaDocGia as [Mã độc giả],
+        sTenDocGia as [Tên độc giả],
+        CASE 
+            WHEN bGioiTinh = 1 THEN N'Nam'
+            ELSE N'Nữ'
+        END AS [Giới tính],
+        dNgaySinh as [Ngày sinh],
+        sDiaChi as [Địa chỉ],
+        sDT as [SDT]
+    FROM 
+        DocGia
+    WHERE 
+		sMaDocGia like '%' + @TuKhoa + '%' 
+        or sTenDocGia LIKE '%' + @TuKhoa + '%'
+        OR CONVERT(NVARCHAR(4), YEAR(dNgaySinh)) LIKE '%' + @TuKhoa + '%'
+		OR CONVERT(NVARCHAR(2), month(dNgaySinh)) LIKE '%' + @TuKhoa + '%'
+		OR CONVERT(NVARCHAR(2), day(dNgaySinh)) LIKE '%' + @TuKhoa + '%'
+        OR (bGioiTinh = 1 AND @TuKhoa LIKE N'%Nam%') -- Kiểm tra giới tính Nam
+        OR (bGioiTinh = 0 AND @TuKhoa LIKE N'%Nữ%')  -- Kiểm tra giới tính Nữ
+        OR sDiaChi LIKE '%' + @TuKhoa + '%'
+        OR sDT LIKE '%' + @TuKhoa + '%'
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TimKiemNhanVienFull]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[TimKiemNhanVienFull]
+(
+    @TuKhoa NVARCHAR(100)
+)
+AS
+BEGIN
+
+    SELECT 
+        sMaNV as [Mã nhân viên],
+        sTenNV as [Tên nhân viên],
+        CASE 
+            WHEN bGioiTinh = 1 THEN N'Nam'
+            ELSE N'Nữ'
+        END AS [Giới tính],
+        sDiaChi as [Địa chỉ],
+        sDT as [SDT],
+        dNgaySinh as [Ngày sinh],
+        sMaChucVu as [Mã chức vụ]
+    FROM 
+        NhanVien
+    
+    WHERE 
+        sTenNV LIKE '%' + @TuKhoa + '%'
+        OR sDiaChi LIKE '%' + @TuKhoa + '%'
+        OR sDT LIKE '%' + @TuKhoa + '%'
+        OR (bGioiTinh = 1 AND @TuKhoa LIKE N'%Nam%') -- Kiểm tra giới tính Nam
+        OR (bGioiTinh = 0 AND @TuKhoa LIKE N'%Nữ%')  -- Kiểm tra giới tính Nữ
+		OR CONVERT(NVARCHAR(4), YEAR(dNgaySinh)) LIKE '%' + @TuKhoa + '%'
+		OR CONVERT(NVARCHAR(2), month(dNgaySinh)) LIKE '%' + @TuKhoa + '%'
+		OR CONVERT(NVARCHAR(2), day(dNgaySinh)) LIKE '%' + @TuKhoa + '%'
+		or sMaChucVu like '%' + @TuKhoa + '%'
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TimKiemPhieuMuon]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+--tìm kiếm phiếu mượn
+CREATE   PROCEDURE [dbo].[TimKiemPhieuMuon]
+(
+    @TuKhoa NVARCHAR(100)
+)
+AS
+BEGIN
+
+    SELECT 
+        sMaPhieuMuon AS [Mã phiếu mượn],
+        sMaDocGia AS [Mã độc giả],
+        sMaNV AS [Mã nhân viên],
+        sMaSach AS [Mã sách],
+        dNgayMuon AS [Ngày mượn],
+        dNgayHenTra AS [Ngày hẹn trả]
+    FROM 
+        PhieuMuon
+    WHERE 
+        sMaPhieuMuon LIKE '%' + @TuKhoa + '%'
+        OR sMaDocGia LIKE '%' + @TuKhoa + '%'
+        OR sMaNV LIKE '%' + @TuKhoa + '%'
+        OR sMaSach LIKE '%' + @TuKhoa + '%'
+        OR CONVERT(NVARCHAR(10), dNgayMuon, 103) LIKE '%' + @TuKhoa + '%'
+        OR CONVERT(NVARCHAR(10), dNgayHenTra, 103) LIKE '%' + @TuKhoa + '%';
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TimKiemPhieuPhat]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+--tìm kiếm phiếu trả
+CREATE   PROCEDURE [dbo].[TimKiemPhieuPhat]
+(
+    @TuKhoa NVARCHAR(100)
+)
+AS
+BEGIN
+
+    SELECT 
+        sMaPhieuPhat as [Mã phiếu phạt],
+		sMaPhieuTra as [Mã phiếu trả],
+		fTienPhat as [Tiền phạt],
+		sNoiDung as [Nội dung]
+    FROM 
+        PhieuPhat
+    WHERE 
+        sMaPhieuPhat LIKE '%' + @TuKhoa + '%'
+        OR sMaPhieuTra LIKE '%' + @TuKhoa + '%'
+        or fTienPhat like '%' + @TuKhoa + '%'
+		or sNoiDung like '%' + @TuKhoa + '%'
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TimKiemPhieuTra]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+--tìm kiếm phiếu trả
+CREATE   PROCEDURE [dbo].[TimKiemPhieuTra]
+(
+    @TuKhoa NVARCHAR(100)
+)
+AS
+BEGIN
+
+    SELECT 
+        sMaPhieuTra AS [Mã phiếu trả],
+        sMaPhieuMuon AS [Mã phiếu mượn],
+        sMaNV AS [Mã nhân viên],
+        sMaDocGia AS [Mã độc giả],
+        sMaSach as [Mã sách],
+        dNgayTra AS [Ngày trả],
+		sMaTinhTrang AS [Mã tình trạng]
+    FROM 
+        PhieuTra
+    WHERE 
+        sMaPhieuTra LIKE '%' + @TuKhoa + '%'
+        OR sMaPhieuMuon LIKE '%' + @TuKhoa + '%'
+        OR sMaNV LIKE '%' + @TuKhoa + '%'
+        OR sMaDocGia LIKE '%' + @TuKhoa + '%'
+        OR sMaSach like '%' + @TuKhoa + '%'
+        OR CONVERT(NVARCHAR(10), dNgayTra, 103) LIKE '%' + @TuKhoa + '%'
+		OR sMaTinhTrang LIKE '%' + @TuKhoa + '%'
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TimKiemSach]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[TimKiemSach]
+(
+    @TuKhoa NVARCHAR(100)
+)
+AS
+BEGIN
+
+    SELECT 
+        sMaSach AS [Mã sách],
+        sTenSach AS [Tên sách],
+        dNamXB AS [Năm xuất bản],
+        iSoLuong AS [Số lượng],
+        fGia AS [Giá],
+        sMaLoai AS [Mã loại sách],
+        sMaNXB AS [Mã nhà xuất bản],
+		sMaTacGia as [Mã tác giả]
+    FROM 
+        Sach
+    WHERE 
+        sMaSach LIKE '%' + @TuKhoa + '%'
+        OR sTenSach LIKE '%' + @TuKhoa + '%'
+        OR CONVERT(NVARCHAR(4), YEAR(dNamXB)) LIKE '%' + @TuKhoa + '%'
+		OR CONVERT(NVARCHAR(2), month(dNamXB)) LIKE '%' + @TuKhoa + '%'
+		OR CONVERT(NVARCHAR(2), day(dNamXB)) LIKE '%' + @TuKhoa + '%'
+        OR CAST(iSoLuong AS NVARCHAR(10)) LIKE '%' + @TuKhoa + '%'
+        OR CAST(fGia AS NVARCHAR(20)) LIKE '%' + @TuKhoa + '%'
+        OR sMaLoai LIKE '%' + @TuKhoa + '%'
+        OR sMaNXB LIKE '%' + @TuKhoa + '%'
+		OR sMaTacGia LIKE '%' + @TuKhoa + '%'
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[TimKiemTacGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[TimKiemTacGia]
+(
+    @TuKhoa NVARCHAR(100)
+)
+AS
+BEGIN
+    SELECT sMaTacGia, sTenTacGia, 
+           CASE 
+                WHEN bGioiTinh = 1 THEN N'Nam' 
+                ELSE N'Nữ' 
+           END AS GioiTinh
+    FROM TacGia
+    WHERE 
+        sMaTacGia LIKE '%' + @TuKhoa + '%'
+        OR sTenTacGia LIKE '%' + @TuKhoa + '%'
+		OR (bGioiTinh = 1 AND @TuKhoa LIKE N'%Nam%') -- Kiểm tra giới tính Nam
+        OR (bGioiTinh = 0 AND @TuKhoa LIKE N'%Nữ%')  -- Kiểm tra giới tính Nữ
+END
+GO
+/****** Object:  StoredProcedure [dbo].[XoaDocGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[XoaDocGia]
+(
+    @MaDocGia NVARCHAR(100)
+)
+AS
+BEGIN
+
+    DELETE FROM DocGia
+    WHERE sMaDocGia = @MaDocGia
+END
+GO
+/****** Object:  StoredProcedure [dbo].[XoaNhanVien]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[XoaNhanVien]
+(
+    @MaNV NVARCHAR(20)
+)
+AS
+BEGIN
+    DELETE FROM NhanVien
+    WHERE sMaNV = @MaNV
+END
+GO
+/****** Object:  StoredProcedure [dbo].[XoaPhieuMuon]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[XoaPhieuMuon]
+    @MaPhieuMuon NVARCHAR(20)
+AS
+BEGIN
+
+        DELETE FROM PhieuMuon WHERE sMaPhieuMuon = @MaPhieuMuon;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[XoaPhieuPhat]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[XoaPhieuPhat]
+    @MaPhieuPhat NVARCHAR(20)
+AS
+BEGIN
+
+        DELETE FROM PhieuPhat WHERE sMaPhieuPhat = @MaPhieuPhat;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[XoaPhieuTra]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[XoaPhieuTra]
+    @MaPhieuTra NVARCHAR(20)
+AS
+BEGIN
+
+        DELETE FROM PhieuTra WHERE sMaPhieuTra = @MaPhieuTra;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[XoaSach]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[XoaSach]
+    @MaSach NVARCHAR(100)
+AS
+BEGIN
+        -- Xóa sách từ bảng Sach
+        DELETE FROM Sach WHERE sMaSach = @MaSach;
+END
+GO
+/****** Object:  StoredProcedure [dbo].[XoaTacGia]    Script Date: 4/6/2024 4:37:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE   PROCEDURE [dbo].[XoaTacGia]
+(
+    @MaTacGia NVARCHAR(100)
+)
+AS
+BEGIN
+    DELETE FROM TacGia
+    WHERE sMaTacGia = @MaTacGia;
+END
+GO
+USE [master]
+GO
+ALTER DATABASE [QLTV] SET  READ_WRITE 
+GO
